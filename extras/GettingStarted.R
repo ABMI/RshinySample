@@ -30,21 +30,21 @@ library(stringr)
 
 # 1.DB connect
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms= "sql server",
-                                                                server='128.1.99.58',
-                                                                user='seol',
-                                                                password='Asdf1004!!',
-                                                                port='1433',
-                                                                pathToDriver = '/usr/lib/jvm/java-1.11.0-openjdk-amd64')
+                                                                server='server',
+                                                                user='user name',
+                                                                password='PW',
+                                                                port='port',
+                                                                pathToDriver = 'pathToDriver')
 oracleTempSchema <- NULL
-cdmDatabaseSchema <- "SynPUF_CDM.dbo"
-cohortDatabaseSchema <- "cohortDb.dbo"
+cdmDatabaseSchema <- "cdmDatabaseSchema"
+cohortDatabaseSchema <- "cohortDatabaseSchema"
 
 connection <- DatabaseConnector::connect(connectionDetails = connectionDetails)
 
 # 2.sample cohort table create
 createCohort <- F # Create sample cohort table for test
 generateCohort <- F
-cohortTable <- "seol_synPuf_cohort3"
+cohortTable <- "seol_synPuf_cohort"
 targetCohortId <- 2087
 DiganosisConceptID <- '74582, 197500' # breastcancer ConceptID
 
