@@ -94,29 +94,6 @@ with cohort_ends (event_id, person_id, end_date) as
 	-- cohort exit dates
   -- By default, cohort exit at the event's op end date
 select event_id, person_id, op_end_date as end_date from #included_events
-UNION ALL
--- Censor Events
-select i.event_id, i.person_id, MIN(c.start_date) as end_date
-FROM #included_events i
-JOIN
-(
--- Begin Visit Occurrence Criteria
-select C.person_id, C.visit_occurrence_id as event_id, C.visit_start_date as start_date, C.visit_end_date as end_date,
-       C.visit_occurrence_id, C.visit_start_date as sort_date
-from
-(
-  select vo.*
-  FROM @cdm_database_schema.VISIT_OCCURRENCE vo
-
-) C
-
-WHERE C.visit_end_date < DATEFROMPARTS(2022, 9, 16)
--- End Visit Occurrence Criteria
-
-) C on C.person_id = I.person_id and C.start_date >= I.start_date and C.START_DATE <= I.op_end_date
-GROUP BY i.event_id, i.person_id
-
-
 ),
 first_ends (person_id, start_date, end_date) as
 (

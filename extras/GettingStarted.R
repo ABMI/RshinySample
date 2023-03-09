@@ -6,54 +6,74 @@
 # # Install ExtractCohort
 # devtools::install_github("ABMI/ExtractCohort")
 # library(ExtractCohort)
+# library(roxygen2)
+# library(devtools)
 
-library(roxygen2)
-library(devtools)
 library(lubridate)
+library(ggplot2)
+library(dplyr)
+library(RSQLite)
+library(plotly)
+library(quantmod)
+library(data.table)
+library(shiny)
+library(shinydashboard)
+library(shinythemes)
+library(summaryBox)
+library(DT)
+library(ggrepel)
+library(gridExtra)
+library(shinyWidgets)
+library(shinyalert)
+library(stringr)
 
 
 # 1.DB connect
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms= "sql server",
-                                                                server='128.1.99.58',
-                                                                user='seol',
-                                                                password='Asdf1004!!',
-                                                                port='1433',
-                                                                pathToDriver = '/usr/lib/jvm/java-1.11.0-openjdk-amd64/')
+                                                                server='server',
+                                                                user='user',
+                                                                password='password',
+                                                                port='port',
+                                                                pathToDriver = 'pathToDriver')
 oracleTempSchema <- NULL
-cdmDatabaseSchema <- "CDMPv533_ABMI.dbo"
-cohortDatabaseSchema <- "cohortDb.dbo"
+cdmDatabaseSchema <- "cdmDatabaseSchema"
+cohortDatabaseSchema <- "cohortDatabaseSchema"
 
 connection <- DatabaseConnector::connect(connectionDetails = connectionDetails)
 
-# Temp 1_sample cohort table create
-T_createCohort <- FALSE # Create sample cohort table for test
-T_genorateCohort <-  FALSE
-cohortTable <- "seol_CRC_0614"
-targetCohortId <- 1842
-DiganosisConceptID <- '197500, 74582'
-nowYear <- year(Sys.Date())
+# 2.sample cohort table create
+createCohort <- T # Create sample cohort table for test
+generateCohort <- T
+cohortTable <- "cohort_table_name"
+targetCohortId <- 2087
+DiganosisConceptID <- '74582, 197500' # breastcancer ConceptID
 
-# Create cohort table
-if(T_createCohort){
-  createCohortTable(connection,
-                    oracleTempSchema,
-                    cohortDatabaseSchema,
-                    cohortTable_temp = "temp",
-                    DiganosisConceptID)
-}
+# Load Cohort table
+Cohort <- loadCohortTable(createCohort,
+                          generateCohort,
+                          connection,
+                          cohortDatabaseSchema,
+                          cohortTable,
+                          DiganosisConceptID)
+# Load note report
+BiopsyResult <- loadReportTable()
 
-# Generate target cohort
-if(T_genorateCohort){
-  cohortGeneration(connection,
-                   oracleTempSchema,
-                   cdmDatabaseSchema,
-                   cohortDatabaseSchema,
-                   cohortTable,
-                   cohortTable_temp = "temp",
-                   targetCohortId,
-                   DiganosisConceptID)
-}
+# TNM stage code
+TNMcode <- loadTNMcode()
+
+# Calculation
+totalVisitTable <- visitCountDiag()
+Ave_obserperiod <- F_obserperiod()
+Ave_visit <- F_visit()
+Ave_EmerVisit <- F_EmerVisit()
+Ave_HosVisit <- F_HOSvisit()
+Ave_HOSperiod <- F_HOSperiod()
 
 
-# 2. Run APP
-ExtractCohort()
+# TRACER figure
+TRACERflow <- "http://14rg.abmi.kr/files/code/Dashboard/ExtractCohort/breastcancer.html"
+
+
+# # 3. Run APP
+# ExtractCohort()
+
