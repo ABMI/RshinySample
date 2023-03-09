@@ -30,21 +30,21 @@ library(stringr)
 
 # 1.DB connect
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms= "sql server",
-                                                                server='server',
-                                                                user='user',
-                                                                password='password',
-                                                                port='port',
-                                                                pathToDriver = 'pathToDriver')
+                                                                server='128.1.99.58',
+                                                                user='seol',
+                                                                password='Asdf1004!!',
+                                                                port='1433',
+                                                                pathToDriver = '/usr/lib/jvm/java-1.11.0-openjdk-amd64')
 oracleTempSchema <- NULL
-cdmDatabaseSchema <- "cdmDatabaseSchema"
-cohortDatabaseSchema <- "cohortDatabaseSchema"
+cdmDatabaseSchema <- "SynPUF_CDM.dbo"
+cohortDatabaseSchema <- "cohortDb.dbo"
 
 connection <- DatabaseConnector::connect(connectionDetails = connectionDetails)
 
 # 2.sample cohort table create
-createCohort <- T # Create sample cohort table for test
-generateCohort <- T
-cohortTable <- "cohort_table_name"
+createCohort <- F # Create sample cohort table for test
+generateCohort <- F
+cohortTable <- "seol_synPuf_cohort3"
 targetCohortId <- 2087
 DiganosisConceptID <- '74582, 197500' # breastcancer ConceptID
 
@@ -55,8 +55,6 @@ Cohort <- loadCohortTable(createCohort,
                           cohortDatabaseSchema,
                           cohortTable,
                           DiganosisConceptID)
-# Load note report
-BiopsyResult <- loadReportTable()
 
 # TNM stage code
 TNMcode <- loadTNMcode()

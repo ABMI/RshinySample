@@ -26,28 +26,6 @@ shinyApp(
                                                                       width = NULL,
                                                                       height = "100%")
                                                                   )
-                                                           ),
-                                                    # Proportion of TNM stage
-                                                    column(6,
-                                                           tags$h1("TNM Proportion"),
-                                                           column(4,
-                                                                  box(plotlyOutput("Ts"),
-                                                                      width = NULL,
-                                                                      height = "100%"
-                                                                      )
-                                                                  ),
-                                                           column(4,
-                                                                  box(plotlyOutput("Ns"),
-                                                                      width = NULL,
-                                                                      height = "100%"
-                                                                  )
-                                                           ),
-                                                           column(4,
-                                                                  box(plotlyOutput("Ms"),
-                                                                      width = NULL,
-                                                                      height = "100%"
-                                                                  )
-                                                           )
                                                            )
                                                     ),
                                            # 2nd line
@@ -111,36 +89,7 @@ shinyApp(
                                      htmlOutput("Sankey"),
                                      type = 5)
                                  )
-                        ),
-                        # NOTE TAB
-                        tabPanel(title = tags$b("BIOMARKER"),
-                                 fluidRow(column(6,
-                                                 box(plotlyOutput("MSI_b"),
-                                                     title = tags$b(paste0("Microsatellite instability",
-                                                                          " (n =",
-                                                                          sum(!is.na(BiopsyResult$MSI)),
-                                                                          ", ",
-                                                                          round(sum(!is.na(BiopsyResult$MSI))/length(unique(Cohort$SUBJECT_ID))*100, digits = 2),
-                                                                          "%)")),
-                                                     width = "50%",
-                                                     height = "100%"
-                                                     )
-                                                 ),
-                                          column(6,
-                                                 box(plotlyOutput("cancerType"),
-                                                     title = tags$b("Cancer type"),
-                                                     width = "50%",
-                                                     height = "100%")
-                                                 )
-                                          ),
-                                 fluidRow(column(6,
-                                                 box(plotlyOutput("MSI_p"),
-                                                     title = tags$b("Microsatellite instability"),
-                                                     width = "50%",
-                                                     height = "100%")
-                                                 )
-                                          )
-                                 )
+                        )
                  )
         ),
 
@@ -1131,11 +1080,6 @@ shinyApp(
                        title = 'Trends in death by year')
         })
 
-        # TNM stage
-        output$Ts <- renderPlotly(TGraph())
-        output$Ns <- renderPlotly(NGraph())
-        output$Ms <- renderPlotly(MGraph())
-
         # Average
         output$AvgObserPeriod <- renderUI({
             summaryBox3(title = tags$b("Mean(SD) duration of Observation(days)"),
@@ -1186,47 +1130,6 @@ shinyApp(
         output$totalDiagnosis <- DT::renderDataTable(sortDiagnosis())
         output$genderDiagnosis <- DT::renderDataTable(rc_sex())
         output$ageDiagnosis <- DT::renderDataTable(rc_age())
-
-        # Biomarker
-        output$MSI_b <- renderPlotly({
-            msi <- as.data.frame(table(BiopsyResult$MSI))
-            msi_b <- plot_ly(msi,
-                             x = ~Var1,
-                             y = ~Freq,
-                             color = ~Var1,
-                             text = ~Freq,
-                             type = 'bar',
-                             textposition = 'outside',
-                             hoverinfo = 'text') %>%
-                layout(xaxis = list(title = "",
-                                    categoryarray = "Stable", "Low", "High"),
-                       yaxis = list(title = ""))
-            })
-        output$MSI_p <- renderPlotly({
-            msi <- as.data.frame(table(BiopsyResult$MSI))
-            msi_p <- plot_ly(msi, labels = ~Var1, values = ~Freq, type = 'pie',
-                             textposition = 'inside',
-                             textinfo = 'label+percent',
-                             insidetextfont = list(color = 'black'),
-                             marker = list(line = list(color = '#FFFFFF', width = 1)),
-                             showlegend = T) %>%
-                layout(colorway = c('#D3D6A7','#F6C297','#FBD591'))
-        })
-        output$cancerType <- renderPlotly({
-            cType <- as.data.frame(table(BiopsyResult$DIAGNOSIS))
-            G_cType <- plot_ly(cType,
-                               x = ~Var1,
-                               y = ~Freq,
-                               color = ~Var1,
-                               text = ~Freq,
-                               type = 'bar',
-                               textposition = 'outside',
-                               hoverinfo = 'text',
-                               showlegend = F) %>%
-                layout(xaxis = list(title = "",
-                                    categoryorder = ""),
-                       yaxis = list(title = ""))
-        })
 
 
         # Inidividual Level

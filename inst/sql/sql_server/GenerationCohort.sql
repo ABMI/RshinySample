@@ -189,14 +189,13 @@ select @target_cohort_id as cohort_definition_id, person_id, start_date, end_dat
 FROM #final_cohort CO
 ;
 
-select a.cohort_definition_id, a.subject_id, a.cohort_start_date, a.cohort_end_date, d.year_of_birth, year(a.cohort_start_date)-d.year_of_birth as diagnosis_age, d.gender_source_value, b.condition_concept_id, c.concept_name, b.condition_start_date, e.death_date, z.value_as_concept_id, z.measurement_source_value
+select a.cohort_definition_id, a.subject_id, a.cohort_start_date, a.cohort_end_date, d.year_of_birth, year(a.cohort_start_date)-d.year_of_birth as diagnosis_age, d.gender_source_value, b.condition_concept_id, c.concept_name, b.condition_start_date, e.death_date
 into @target_database_schema.@cohortTable
 From @target_database_schema.@target_cohort_table a
 left outer join @cdm_database_schema.condition_occurrence b on a.subject_id = b.person_id
 left outer join @cdm_database_schema.person d on a.subject_id = d.person_id
 left outer join @cdm_database_schema.CONCEPT c on b.condition_concept_id = c.concept_id
-left outer join @cdm_database_schema.death e on a.subject_id = e.person_id
-left outer join @cdm_database_schema.cancer_measurement z on a.subject_id = z.person_id;
+left outer join @cdm_database_schema.death e on a.subject_id = e.person_id;
 
 
 TRUNCATE TABLE #cohort_rows;
