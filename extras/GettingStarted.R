@@ -2,12 +2,6 @@
 # install.packages("devtools")
 # devtools::install_github("OHDSI/DatabaseConnector")
 # devtools::install_github("OHDSI/SqlRender")
-#
-# # Install ExtractCohort
-# devtools::install_github("ABMI/ExtractCohort")
-# library(ExtractCohort)
-# library(roxygen2)
-# library(devtools)
 
 library(lubridate)
 library(ggplot2)
@@ -27,24 +21,26 @@ library(shinyWidgets)
 library(shinyalert)
 library(stringr)
 
+DatabaseConnector::downloadJdbcDrivers(dbms = 'postgresql', pathToDriver = '/home/seol/code')
 
 # 1.DB connect
 connectionDetails <- DatabaseConnector::createConnectionDetails(dbms= "sql server",
                                                                 server='server',
-                                                                user='user name',
-                                                                password='PW',
+                                                                user='user',
+                                                                password='password',
                                                                 port='port',
                                                                 pathToDriver = 'pathToDriver')
+
 oracleTempSchema <- NULL
-cdmDatabaseSchema <- "cdmDatabaseSchema"
-cohortDatabaseSchema <- "cohortDatabaseSchema"
+cdmDatabaseSchema <- "synpuf_cdm.public"
+cohortDatabaseSchema <- "synpuf_cdm.cohort"
 
 connection <- DatabaseConnector::connect(connectionDetails = connectionDetails)
 
 # 2.sample cohort table create
-createCohort <- F # Create sample cohort table for test
-generateCohort <- F
-cohortTable <- "seol_synPuf_cohort"
+createCohort <- T # Create sample cohort table for test
+generateCohort <- T
+cohortTable <- "seol_brestcancer_cohort"
 targetCohortId <- 2087
 DiganosisConceptID <- '74582, 197500' # breastcancer ConceptID
 
