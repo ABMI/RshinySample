@@ -3,6 +3,7 @@
 # devtools::install_github("OHDSI/DatabaseConnector")
 # devtools::install_github("OHDSI/SqlRender")
 
+# Changing the library path with revn
 .libPaths("./renv/sandbox/R-4.1/x86_64-pc-linux-gnu/6212ffa2")
 
 library(lubridate)
@@ -23,6 +24,7 @@ library(shinyWidgets)
 library(shinyalert)
 library(stringr)
 
+# if you don't have jdbcDriver for postgresql, you set the pathToDriver path and run the below code.
 # DatabaseConnector::downloadJdbcDrivers(dbms = 'postgresql', pathToDriver = 'pathToDriver')
 
 # 1.DB connect
@@ -72,4 +74,5 @@ TRACERflow <- "http://14rg.abmi.kr/files/code/Dashboard/ExtractCohort/breastcanc
 
 # # 3. Run APP
 # ExtractCohort()
+# If your app doesn't open, try running the app.R file in the inst folder.
 
