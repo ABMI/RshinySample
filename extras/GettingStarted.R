@@ -3,6 +3,8 @@
 # devtools::install_github("OHDSI/DatabaseConnector")
 # devtools::install_github("OHDSI/SqlRender")
 
+.libPaths("./renv/sandbox/R-4.1/x86_64-pc-linux-gnu/6212ffa2")
+
 library(lubridate)
 library(ggplot2)
 library(dplyr)
@@ -21,10 +23,10 @@ library(shinyWidgets)
 library(shinyalert)
 library(stringr)
 
-DatabaseConnector::downloadJdbcDrivers(dbms = 'postgresql', pathToDriver = '/home/seol/code')
+# DatabaseConnector::downloadJdbcDrivers(dbms = 'postgresql', pathToDriver = 'pathToDriver')
 
 # 1.DB connect
-connectionDetails <- DatabaseConnector::createConnectionDetails(dbms= "sql server",
+connectionDetails <- DatabaseConnector::createConnectionDetails(dbms= "postgresql",
                                                                 server='server',
                                                                 user='user',
                                                                 password='password',
